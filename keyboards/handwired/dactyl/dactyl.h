@@ -40,18 +40,18 @@ void init_expander(void);
     k20,k21,k22,k23,k24,k25,                                            \
     k30,k31,k32,k33,k34,k35,                                            \
     k40,k41,k42,k43,k44,                                                \
-                            k55,k50,                                    \
-                                k54,                                    \
-                        k53,k52,k51,                                    \
+                            k55,k54,                                    \
+                                k53,                                    \
+                        k52,k51,k50,                                    \
                                                                         \
             k06,k07,k08,k09,k0A,k0B,                                    \
             k16,k17,k18,k19,k1A,k1B,                                    \
             k26,k27,k28,k29,k2A,k2B,                                    \
             k36,k37,k38,k39,k3A,k3B,                                    \
                 k47,k48,k49,k4A,k4B,                                    \
-    k5B,k56,                                                            \
-    k57,                                                                \
-    k5A,k59,k58 )                                                       \
+    k57,k56,                                                            \
+    k58,                                                                \
+    k5B,k5A,k59 )                                                       \
                                                                         \
    /* matrix positions */                                               \
    {                                                                    \
