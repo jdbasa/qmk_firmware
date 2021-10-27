@@ -7,8 +7,10 @@
 #define MOU  3 // mouse
 
 enum combos {
-  DF_NUM,
-  SO_BASE,
+  KL_ENT,
+  LS_BASE,
+  SD_NUM,
+  UR_ENT,
   COMBO_LENGTH
 };
 uint16_t COMBO_LEN = COMBO_LENGTH;
@@ -26,7 +28,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |   `  |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  |  \   |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |Tab/TC|   A  |S/Meh |D/Cmd L2 F/Op|   G  |                    |   H  |J/Opt |K/Cmd |L/Meh |;/Ctrl|  '   |
+ * |Tab/TC|   A  |S/Meh L2 D/Cm| F/Opt|   G  |                    |   H  |J/Opt |K/Cm Ent L/Mh|;/Ctrl|  '   |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | Undo |   Z  |   X  |   C  |   V  |   B  |                    |   N  |   M  |   ,  |   .  |  /   | Redo |
  * |------+------+------+------+------+------'                    `------+------+------+------+------+------|
@@ -36,8 +38,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                      | Back | Max  |  |Spa/Sh|Forwrd|
  *                               ,------|------|------|  |------+------+------.
  *                               |      |      |Center|  |Cmd+Sh|      |Back  |
- *                               |Space |Shift |------|  |------|Enter/|space/|
- *                               |      |      | Esc  |  |Delete|  L1  |  L2  |
+ *                               |Space |Shift |------|  |------|  L1  |space/|
+ *                               |      |      | Esc  |  |Delete|      |  L2  |
  *                               `--------------------'  `--------------------'
  */
 [BASE] = LAYOUT_dactyl(
@@ -58,7 +60,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                 LCMD(KC_X),   LCMD(KC_C),   LCMD(KC_V),  MEH(KC_LEFT),    MEH(KC_RGHT),
        LSFT_T(KC_SPC),           SCMD(KC_RBRC),
        OSM(MOD_LGUI | MOD_LSFT),
-       KC_DEL,                   LT(SYM, KC_ENT), LT(NUM, KC_BSPC)
+       KC_DEL,                   OSL(SYM), LT(NUM, KC_BSPC)
 ),
 /* Keymap 1: Symbol Layer
  *
@@ -108,7 +110,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |L+Cm+S| LOpS L0 ROpS|R+Cm+S|                    | Left | Down |  Up  |Right |  L3  |      |
+ * |      |      |LCmdS L0 LOpS|R+Op+S|R+Cm+S|                    | Left | Down |  Up Ent Rght|  L3  |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |      | F14  | F13  |Shift |      |                    |Lt+Cmd|Lt+Opt|Rt+Opt|Rt+Cmd|      |      |
  * |------+------+------+------+------+------'                    `------+------+------+------+------+------|
@@ -185,24 +187,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 };
 
-const uint16_t PROGMEM df_combo[] = {LCMD_T(KC_D), LOPT_T(KC_F), COMBO_END};
-const uint16_t PROGMEM so_combo[] = {LSA(KC_LEFT), LSA(KC_RGHT), COMBO_END};
+const uint16_t PROGMEM kl_combo[] = {RCMD_T(KC_K), MEH_T(KC_L), COMBO_END};
+const uint16_t PROGMEM ls_combo[] = {SCMD(KC_LEFT), LSA(KC_LEFT), COMBO_END};
+const uint16_t PROGMEM sd_combo[] = {MEH_T(KC_S), LCMD_T(KC_D), COMBO_END};
+const uint16_t PROGMEM ur_combo[] = {KC_UP, KC_RGHT, COMBO_END};
 
 combo_t key_combos[] = {
-  [DF_NUM] = COMBO_ACTION(df_combo),
-  [SO_BASE] = COMBO_ACTION(so_combo)
+  [KL_ENT] = COMBO(kl_combo, KC_ENT),
+  [LS_BASE] = COMBO_ACTION(ls_combo),
+  [SD_NUM] = COMBO_ACTION(sd_combo),
+  [UR_ENT] = COMBO(ur_combo, KC_ENT)
 };
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
   switch(combo_index) {
-    case DF_NUM:
-      if (pressed) {
-        layer_on(NUM);
-      }
-      break;
-    case SO_BASE:
+    case LS_BASE:
       if (pressed) {
         layer_off(NUM);
+      }
+      break;
+    case SD_NUM:
+      if (pressed) {
+        layer_on(NUM);
       }
       break;
   }
@@ -216,8 +222,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case LT(NUM, KC_BSPC):
       return TAPPING_TERM - 42;
-    case LT(SYM, KC_ENT):
-      return TAPPING_TERM - 45;
     default:
       return TAPPING_TERM;
   }
