@@ -8,8 +8,7 @@
 
 enum combos {
   KL_ENT,
-  LS_BASE,
-  SD_NUM,
+  SD_ESC,
   UR_ENT,
   COMBO_LENGTH
 };
@@ -28,7 +27,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |   `  |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  |  \   |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |Tab/TC|   A  |S/Meh L2 D/Cm| F/Opt|   G  |                    |   H  |J/Opt |K/Cm Ent L/Mh|;/Ctrl|  '   |
+ * |Tab/TC|   A  |S/Mh Esc D/Cm| F/Opt|   G  |                    |   H  |J/Opt |K/Cm Ent L/Mh|;/Ctrl|  '   |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | Undo |   Z  |   X  |   C  |   V  |   B  |                    |   N  |   M  |   ,  |   .  |  /   | Redo |
  * |------+------+------+------+------+------'                    `------+------+------+------+------+------|
@@ -39,7 +38,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                               ,------|------|------|  |------+------+------.
  *                               |      |      |Center|  |Cmd+Sh|      |Back  |
  *                               |Space |Shift |------|  |------|  L1  |space/|
- *                               |      |      | Esc  |  |Delete|      |  L2  |
+ *                               |      |      |  L2  |  |Delete|      |  L2  |
  *                               `--------------------'  `--------------------'
  */
 [BASE] = LAYOUT_dactyl(
@@ -51,7 +50,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        HYPR(KC_LEFT), HYPR(KC_RGHT), SCMD(KC_4),    SCMD(KC_5),    SCMD(LCTL(KC_4)),
                                                                                      SCMD(KC_LBRC), LAG(KC_F),
                                                                                                     LAG(KC_C),
-                                                                             KC_SPC, OSM(MOD_LSFT), KC_ESC,
+                                                                             KC_SPC, OSM(MOD_LSFT), TG(NUM),
        // right hand
                                  KC_MPRV,       KC_MPLY,      KC_MNXT,      KC_MUTE,     KC_VOLD,         KC_VOLU,
                                  KC_Y,          KC_U,         KC_I,         KC_O,        KC_P,            KC_BSLS,
@@ -110,7 +109,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |LCmdS L0 LOpS|R+Op+S|R+Cm+S|                    | Left | Down |  Up Ent Rght|  L3  |      |
+ * |      |      |L+Cm+S|L+Op+S|R+Op+S|R+Cm+S|                    | Left | Down |  Up Ent Rght|  L3  |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |      | F14  | F13  |Shift |      |                    |Lt+Cmd|Lt+Opt|Rt+Opt|Rt+Cmd|      |      |
  * |------+------+------+------+------+------'                    `------+------+------+------+------+------|
@@ -188,31 +187,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 const uint16_t PROGMEM kl_combo[] = {RCMD_T(KC_K), MEH_T(KC_L), COMBO_END};
-const uint16_t PROGMEM ls_combo[] = {SCMD(KC_LEFT), LSA(KC_LEFT), COMBO_END};
 const uint16_t PROGMEM sd_combo[] = {MEH_T(KC_S), LCMD_T(KC_D), COMBO_END};
 const uint16_t PROGMEM ur_combo[] = {KC_UP, KC_RGHT, COMBO_END};
 
 combo_t key_combos[] = {
   [KL_ENT] = COMBO(kl_combo, KC_ENT),
-  [LS_BASE] = COMBO_ACTION(ls_combo),
-  [SD_NUM] = COMBO_ACTION(sd_combo),
+  [SD_ESC] = COMBO(sd_combo, KC_ESC),
   [UR_ENT] = COMBO(ur_combo, KC_ENT)
 };
-
-void process_combo_event(uint16_t combo_index, bool pressed) {
-  switch(combo_index) {
-    case LS_BASE:
-      if (pressed) {
-        layer_off(NUM);
-      }
-      break;
-    case SD_NUM:
-      if (pressed) {
-        layer_on(NUM);
-      }
-      break;
-  }
-}
 
 bool get_combo_must_tap(uint16_t index, combo_t *combo) {
   return true;
