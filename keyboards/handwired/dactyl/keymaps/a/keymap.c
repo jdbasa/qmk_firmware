@@ -15,8 +15,7 @@ enum combos {
 uint16_t COMBO_LEN = COMBO_LENGTH;
 
 enum custom_keycodes {
-  SLEEP = SAFE_RANGE,
-  TAB_CMD
+  TAB_CMD = SAFE_RANGE
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -43,7 +42,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [BASE] = LAYOUT_dactyl(
        // left hand
-       SLEEP,         KC_CAPS,       LCMD(KC_LBRC), LCMD(KC_RBRC), LAG(KC_LEFT),     LAG(KC_RGHT),
+       LAG(KC_PWR),   KC_CAPS,       LCMD(KC_LBRC), LCMD(KC_RBRC), LAG(KC_LEFT),     LAG(KC_RGHT),
        KC_GRV,        KC_Q,          KC_W,          KC_E,          KC_R,             KC_T,
        TAB_CMD,       KC_A,          MEH_T(KC_S),   LCMD_T(KC_D),  LOPT_T(KC_F),     KC_G,
        LCMD(KC_Z),    KC_Z,          KC_X,          KC_C,          KC_V,             KC_B,
@@ -212,13 +211,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   static uint16_t timer;
   switch (keycode) {
-    case SLEEP:
-      if (record->event.pressed) {
-        tap_code16(LCTL(LCMD(KC_Q)));
-        wait_ms(400);
-        tap_code(KC_ESC);
-      }
-      break;
     case TAB_CMD:
       if (record->event.pressed) {
         timer = timer_read();
